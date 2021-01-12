@@ -23,8 +23,6 @@ module Jets::Gems
     # Checks whether the gem is found at the serverlessgems source.
     def run(exit_early: false)
       puts "Checking projects gems for binary Lambda gems..."
-      puts "compiled_gems:".color(:yellow)
-      pp compiled_gems
       compiled_gems.each do |gem_name|
         puts "Checking #{gem_name}..." if @options[:cli]
         exist = Jets::Gems::Exist.new
@@ -119,7 +117,6 @@ EOL
       # We'll filter out for the json gem as a hacky workaround, unsure if there are more
       # gems though that exhibit this behavior.
       if @options[:use_gemspec] == false
-        puts "hi1"
         # Afterburner mode
         compiled_gems = compiled_gem_paths.map { |p| gem_name_from_path(p) }.uniq
         # Double check that the gems are also in the gemspec list since that
@@ -129,14 +126,30 @@ EOL
         # TODO: figure out if we need
         # compiled_gems.select { |g| gemspec_compiled_gems.include?(g) }
       else
-        puts "hi2"
         # default when use_gemspec not set
         #
         #     jets deploy
         #     jets gems:check
         #
-        gemspec_compiled_gems
+        gems = gemspec_compiled_gems
+        gems += other_compiled_gems
+        gems.uniq
       end
+    end
+
+    # note 2.7.0/gems vs 2.7.0/extensions
+    #
+    #   /tmp/jets/demo/stage/opt/ruby/gems/2.7.0/gems/nokogiri-1.11.1-x86_64-darwin/
+    #   /tmp/jets/demo/stage/opt/ruby/gems/2.7.0/extensions/x86_64-linux/2.7.0/
+    #
+    # Also the platform is appended to the gem folder now
+    #
+    #   /tmp/jets/demo/stage/opt/ruby/gems/2.7.0/gems/nokogiri-1.11.1-x86_64-darwin
+    #   /tmp/jets/demo/stage/opt/ruby/gems/2.7.0/gems/nokogiri-1.11.1-x86_64-linux
+    #
+    def other_compiled_gems
+      paths = Dir.glob("/tmp/jets/demo/stage/opt/ruby/gems/#{Jets::Gems.ruby_folder}/gems/*{-darwin,-linux}")
+      paths.map { |p| File.basename(p).sub(/-x\d+.*-(darwin|linux)/,'') }
     end
 
     # Use pre-compiled gem because the gem could have development header shared
