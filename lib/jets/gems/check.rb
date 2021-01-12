@@ -22,7 +22,7 @@ module Jets::Gems
 
     # Checks whether the gem is found at the serverlessgems source.
     def run(exit_early: false)
-      puts "Checking projects gems for binary Lambda gems..."
+      puts "Checking projects gems for binary serverlessgems..."
       compiled_gems.each do |gem_name|
         puts "Checking #{gem_name}..." if @options[:cli]
         exist = Jets::Gems::Exist.new
@@ -148,7 +148,7 @@ EOL
     #   /tmp/jets/demo/stage/opt/ruby/gems/2.7.0/gems/nokogiri-1.11.1-x86_64-linux
     #
     def other_compiled_gems
-      paths = Dir.glob("/tmp/jets/demo/stage/opt/ruby/gems/#{Jets::Gems.ruby_folder}/gems/*{-darwin,-linux}")
+      paths = Dir.glob("#{Jets.build_root}/stage/opt/ruby/gems/#{Jets::Gems.ruby_folder}/gems/*{-darwin,-linux}")
       paths.map { |p| File.basename(p).sub(/-x\d+.*-(darwin|linux)/,'') }
     end
 
