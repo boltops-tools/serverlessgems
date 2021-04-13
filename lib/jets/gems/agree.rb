@@ -7,19 +7,32 @@ module Jets::Gems
     # Only prompts if hasnt prompted before and saved a ~/.jets/agree file
     def prompt
       return if bypass_prompt
-      return if File.exist?(@agree_file)
+      return if File.exist?(@agree_file) && File.mtime(@agree_file) > Time.parse("2021-04-12")
 
       puts <<~EOL
-        Jets sends data about your gems to serverlessgems.com so that it can build the necessary Lambda layer.
+        Jets uses pre-built binary gems from the serverlessgems.com service to
+        provide a user-friendly developer experience. The Serverless Gems Service
+        rate limits free gem download requests daily. You can upgrade to a paid plan
+        for unlimited gem download requests. Open Source projects may also qualify
+        for a free unlimited plan. More info:
 
-        Reporting gems generally allows Serverless Gems to build new gems within a few minutes.
-        So if you run into missing gems, you can try deploying again after a few minutes.
-        Non-reported gems may take several days or longer.
+          https://www.serverlessgems.com/rate-limits
 
-        Serverless Gems only collects the info it needs to run the service. More info: https://www.serverlessgems.com/privacy
+        If you do not want to use Serverless Gems, you can disable the Serverless
+        Gems service and provide your own custom Lambda Layer. More info:
 
+          https://rubyonjets.com/docs/serverlessgems/
+          https://rubyonjets.com/docs/extras/custom-lambda-layers/
+
+        Also, reporting gems to Serverless Gems allows it to build new gems typically
+        within a few minutes. So if you run into missing gems, you can try deploying
+        again after a few minutes. Non-reported gems may take several days or longer.
+        Serverless Gems only collects the info it needs to run the service.
+        More info: https://www.serverlessgems.com/privacy
         This message will only appear once on this machine.
-        You can also automatically skip this message by setting JETS_AGREE=yes or JETS_AGREE=no
+
+        You can also automatically skip this message by setting:
+        JETS_AGREE=yes or JETS_AGREE=no
 
         Is it okay to send your gem data to Serverless Gems? (Y/n)?
       EOL
