@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/).
 
+## [0.1.3] - 2021-04-13
+- update jets agree messaging
+
 ## [0.1.2] - 2021-01-12
 - [#2](https://github.com/boltops-tools/serverlessgems/pull/2) fix other_compiled_gems Jets.build_root
 
