@@ -1,5 +1,3 @@
-require 'open-uri'
-
 module Jets::Gems
   class Exist
     include Jets::Gems::Api::Concern

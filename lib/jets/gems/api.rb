@@ -18,6 +18,10 @@ module Jets::Gems
       get("report/missing?gem_name=#{gem_name}&ruby_folder=#{ruby_folder}")
     end
 
+    def registered_gems
+      get("gems/registered")
+    end
+
     def ruby_folder
       Jets::Gems.ruby_folder
     end
