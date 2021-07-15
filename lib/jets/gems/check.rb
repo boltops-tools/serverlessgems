@@ -12,7 +12,7 @@ module Jets::Gems
     end
 
     def run!
-      puts "Gems source: #{gems_source}" if @options[:show_source]
+      puts "Gems source: #{gems_source}" if @options[:verbose]
       run(exit_early: true)
     end
 
@@ -24,7 +24,7 @@ module Jets::Gems
     def run(exit_early: false)
       puts "Checking projects gems for binary serverlessgems..."
       compiled_gems.each do |gem_name|
-        puts "Checking #{gem_name}..." if @options[:cli]
+        puts "Checking #{gem_name}..." if @options[:verbose]
         exist = Jets::Gems::Exist.new
         @missing_gems << gem_name unless exist.check(gem_name)
       end
@@ -133,6 +133,7 @@ EOL
         #
         gems = gemspec_compiled_gems
         gems += other_compiled_gems
+        gems += registered_compiled_gems
         gems.uniq
       end
     end
@@ -150,6 +151,18 @@ EOL
     def other_compiled_gems
       paths = Dir.glob("#{Jets.build_root}/stage/opt/ruby/gems/#{Jets::Gems.ruby_folder}/gems/*{-darwin,-linux}")
       paths.map { |p| File.basename(p).sub(/-x\d+.*-(darwin|linux)/,'') }
+    end
+
+    def registered_compiled_gems
+      registered = Jets::Gems::Registered.new
+      registered_gems = registered.all # no version numbers in this list
+
+      paths = Dir.glob("#{Jets.build_root}/stage/opt/ruby/gems/#{Jets::Gems.ruby_folder}/gems/*")
+      project_gems = paths.map { |p| File.basename(p).sub(/-x\d+.*-(darwin|linux)/,'') }
+      project_gems.select do |name|
+        name_only = name.sub(/-\d+\.\d+\.\d+.*/,'')
+        registered_gems.include?(name_only)
+      end
     end
 
     # Use pre-compiled gem because the gem could have development header shared
