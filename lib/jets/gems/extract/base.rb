@@ -41,13 +41,12 @@ module Jets::Gems::Extract
       end
 
       say "Downloading..."
+      downloaded = URI.open(url, 'rb') { |read_file| read_file.read }
+
       FileUtils.mkdir_p(File.dirname(dest)) # ensure parent folder exists
 
-      File.open(dest, 'wb') do |saved_file|
-        URI.open(url, 'rb') do |read_file|
-          saved_file.write(read_file.read)
-        end
-      end
+      File.open(dest, 'wb') { |saved_file| saved_file.write(downloaded) }
+
       dest
     end
 
