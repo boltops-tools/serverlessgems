@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/).
 
+## [0.1.5] - 2021-08-31
+- [#4](https://github.com/boltops-tools/serverlessgems/pull/4) Don't create a file if the download fails
+
 ## [0.1.4] - 2021-07-15
 - [#3](https://github.com/boltops-tools/serverlessgems/pull/3) gems/registered api
 
