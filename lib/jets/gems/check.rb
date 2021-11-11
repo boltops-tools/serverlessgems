@@ -148,9 +148,13 @@ EOL
     #   /tmp/jets/demo/stage/opt/ruby/gems/2.7.0/gems/nokogiri-1.11.1-x86_64-darwin
     #   /tmp/jets/demo/stage/opt/ruby/gems/2.7.0/gems/nokogiri-1.11.1-x86_64-linux
     #
+    # On new 2021 macbook with m1 chip: the gems are being saved in a folder like so:
+    #   nokogiri-1.12.5-arm64-darwin
+    # The GEM_REGEXP accounts for this case.
+    GEM_REGEXP = /-(arm|x)\d+.*-(darwin|linux)/
     def other_compiled_gems
       paths = Dir.glob("#{Jets.build_root}/stage/opt/ruby/gems/#{Jets::Gems.ruby_folder}/gems/*{-darwin,-linux}")
-      paths.map { |p| File.basename(p).sub(/-x\d+.*-(darwin|linux)/,'') }
+      paths.map { |p| File.basename(p).sub(GEM_REGEXP,'') }
     end
 
     def registered_compiled_gems
@@ -158,7 +162,7 @@ EOL
       registered_gems = registered.all # no version numbers in this list
 
       paths = Dir.glob("#{Jets.build_root}/stage/opt/ruby/gems/#{Jets::Gems.ruby_folder}/gems/*")
-      project_gems = paths.map { |p| File.basename(p).sub(/-x\d+.*-(darwin|linux)/,'') }
+      project_gems = paths.map { |p| File.basename(p).sub(GEM_REGEXP,'') }
       project_gems.select do |name|
         name_only = name.sub(/-\d+\.\d+\.\d+.*/,'')
         registered_gems.include?(name_only)
