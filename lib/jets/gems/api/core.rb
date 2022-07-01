@@ -1,3 +1,5 @@
+require "aws-sdk-core"
+
 class Jets::Gems::Api
   module Core
     extend Memoist
@@ -23,6 +25,7 @@ class Jets::Gems::Api
 
     def set_headers!(req)
       req['Authorization'] = token if token
+      req['x-account'] = account if account
       req['Content-Type'] = "application/vnd.api+json"
     end
 
@@ -77,5 +80,15 @@ class Jets::Gems::Api
     def delete(path, data={})
       request(Net::HTTP::Delete, path, data)
     end
+
+    def account
+      sts.get_caller_identity.account rescue nil
+    end
+    memoize :account
+
+    def sts
+      Aws::STS::Client.new
+    end
+    memoize :sts
   end
 end

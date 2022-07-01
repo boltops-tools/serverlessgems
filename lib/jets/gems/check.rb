@@ -26,7 +26,8 @@ module Jets::Gems
       compiled_gems.each do |gem_name|
         puts "Checking #{gem_name}..." if @options[:verbose]
         exist = Jets::Gems::Exist.new
-        @missing_gems << gem_name unless exist.check(gem_name)
+        data = exist.check(gem_name)
+        @missing_gems << data unless data["exist"]
       end
 
       if exit_early && !@missing_gems.empty?
@@ -34,7 +35,8 @@ module Jets::Gems
         # Better to error now than deploy a broken package to AWS Lambda.
         # Provide users with message about using their own serverlessgems source.
         puts missing_message
-        Report.new(@options).report(@missing_gems) if agree.yes?
+        names = @missing_gems.map {|i| i['gem_name']}
+        Report.new(@options).report(names) if agree.yes?
         exit 1
       end
 
@@ -48,10 +50,11 @@ module Jets::Gems
     def missing_message
       template = <<-EOL
 Your project requires compiled gems that are not currently available.  Unavailable pre-compiled gems:
-<% missing_gems.each do |gem| %>
-* <%= gem -%>
+<% missing_gems.each do |missing_gem|
+   available = missing_gem['available'].reject { |v| missing_gem['gem_name'].include?(v) }
+%>
+* Unavailable: <%= missing_gem['gem_name'] -%> Available versions: <%= available.join(' ') %>
 <% end %>
-
 Your current serverlessgems source: #{gems_source}
 
 Jets is unable to build a deployment package that will work on AWS Lambda without the required pre-compiled gems. To remedy this, you can:
