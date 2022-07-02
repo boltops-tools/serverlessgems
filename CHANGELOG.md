@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/).
 
+## [0.2.0] - 2022-07-02
+- provide gems available info
+
 ## [0.1.6] - 2021-11-11
 - [#5](https://github.com/boltops-tools/serverlessgems/pull/5) fix gem regexp detection for 2021 macbook m1 chip
 
