@@ -50,9 +50,24 @@ module Jets::Gems::Extract
     #
     def download_gem
       # download - also move to /tmp/jets/demo/compiled_gems folder
-      url = gem_url
-      basename = File.basename(url).gsub(/\?.*/,'') # remove query string info
-      tarball_dest = download_file(url, download_path(basename))
+      begin
+        @retries ||= 0
+        url = gem_url
+        basename = File.basename(url).gsub(/\?.*/,'') # remove query string info
+        tarball_dest = download_file(url, download_path(basename))
+      rescue OpenURI::HTTPError => e
+        url_without_query = url.gsub(/\?.*/,'')
+        puts "Error downloading #{url_without_query}"
+        @retries += 1
+        if @retries < 3
+          sleep 1
+          puts "Retrying download. Retry attempt: #{@retries}"
+          retry
+        else
+          raise e
+        end
+      end
+
       unless tarball_dest
         message = "Url: #{url} not found"
         if @options[:exit_on_error]

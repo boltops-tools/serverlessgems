@@ -35,7 +35,7 @@ module Jets::Gems::Extract
 
     # Returns the dest path
     def download_file(url, dest)
-      if File.exist?(dest)
+      if File.exist?(dest) && ENV['SG_FORCE_DOWNLOAD'].blank?
         say "File already downloaded #{dest}"
         return dest
       end
