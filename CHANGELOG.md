@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/).
 
+## [0.2.1] - 2023-02-07
+- [#7](https://github.com/boltops-tools/serverlessgems/pull/7) download retry for 403 forbidden
+
 ## [0.2.0] - 2022-07-02
 - provide gems available info
 
