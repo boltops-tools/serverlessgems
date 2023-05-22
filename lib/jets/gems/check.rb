@@ -63,6 +63,8 @@ Jets is unable to build a deployment package that will work on AWS Lambda withou
 * Create your own custom layer with the gem: http://rubyonjets.com/docs/extras/custom-lambda-layers/
 <% if agree.yes? -%>
 * No need to report this to us, as we've already been notified.
+* Usually, missing gems can be built within a few minutes.
+* Some gems may take days or even longer.
 <% elsif agree.no? -%>
 * You have choosen not to report data to serverlessgems so we will not be notified about these missing gems.
 * You can edit ~/.jets/agree to change this.
