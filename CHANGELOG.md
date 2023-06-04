@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/).
 
+## [0.3.0] - 2023-06-04
+- download gems to different ruby folder: avoid conflicts when switching ruby version
+- update missing gems messaging
+
 ## [0.2.1] - 2023-02-07
 - [#7](https://github.com/boltops-tools/serverlessgems/pull/7) download retry for 403 forbidden
 
