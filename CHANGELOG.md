@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/).
 
+## [0.4.0] - 2023-07-24
+- [#8](https://github.com/boltops-tools/serverlessgems/pull/8) erb ruby 3 and autoloader improvements
+
 ## [0.3.0] - 2023-06-04
 - download gems to different ruby folder: avoid conflicts when switching ruby version
 - update missing gems messaging
