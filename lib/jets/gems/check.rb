@@ -77,7 +77,7 @@ Compiled gems usually take some time to figure out how to build as they each dep
 More info: http://rubyonjets.com/docs/serverlessgems/
 
 EOL
-      erb = ERB.new(template, nil, '-') # trim mode https://stackoverflow.com/questions/4632879/erb-template-removing-the-trailing-line
+      erb = ERB.new(template, trim_mode: '-') # trim mode https://stackoverflow.com/questions/4632879/erb-template-removing-the-trailing-line
       erb.result(binding)
     end
 
