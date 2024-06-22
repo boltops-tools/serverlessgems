@@ -1,11 +1,11 @@
 class Jets::Gems::Config
   class Token
     def key
-      data['key']
+      data["key"]
     end
 
     def data
-      load_yaml("#{ENV['HOME']}/.jets/config.yml")
+      load_yaml("#{ENV["HOME"]}/.jets/config.yml")
     end
 
     # Ensure a Hash is returned

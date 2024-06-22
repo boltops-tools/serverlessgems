@@ -3,7 +3,7 @@ RSpec.describe Jets::Gems::Config do
 
   context "data" do
     it "load config" do
-      expect(config.data).to eq({"key"=>"fakekey-in-home"})
+      expect(config.data).to eq({"key" => "fakekey-in-home"})
     end
   end
 end

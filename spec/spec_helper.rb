@@ -1,8 +1,8 @@
 require "bundler/setup"
 require "jets/gems"
 
-ENV['JETS_ROOT'] = 'spec/fixtures/project'
-ENV['HOME'] = 'spec/fixtures/home'
+ENV["JETS_ROOT"] = "spec/fixtures/project"
+ENV["HOME"] = "spec/fixtures/home"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

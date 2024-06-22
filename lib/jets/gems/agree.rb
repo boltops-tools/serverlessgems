@@ -1,7 +1,7 @@
 module Jets::Gems
   class Agree
     def initialize
-      @agree_file = "#{ENV['HOME']}/.jets/agree"
+      @agree_file = "#{ENV["HOME"]}/.jets/agree"
     end
 
     # Only prompts if hasnt prompted before and saved a ~/.jets/agree file
@@ -38,7 +38,7 @@ module Jets::Gems
       EOL
 
       answer = $stdin.gets.strip
-      value = answer =~ /y/i ? 'yes' : 'no'
+      value = /y/i.match?(answer) ? "yes" : "no"
 
       write_file(value)
     end
@@ -46,24 +46,24 @@ module Jets::Gems
     # Allow user to bypass prompt with JETS_AGREE=1 JETS_AGREE=yes etc
     # Useful for CI/CD pipelines.
     def bypass_prompt
-      agree = ENV['JETS_AGREE']
+      agree = ENV["JETS_AGREE"]
       return false unless agree
 
       if %w[1 yes true].include?(agree.downcase)
-        write_file('yes')
+        write_file("yes")
       else
-        write_file('no')
+        write_file("no")
       end
 
       true
     end
 
     def yes?
-      File.exist?(@agree_file) && IO.read(@agree_file).strip == 'yes'
+      File.exist?(@agree_file) && IO.read(@agree_file).strip == "yes"
     end
 
     def no?
-      File.exist?(@agree_file) && IO.read(@agree_file).strip == 'no'
+      File.exist?(@agree_file) && IO.read(@agree_file).strip == "no"
     end
 
     def yes!

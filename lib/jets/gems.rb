@@ -10,8 +10,8 @@ require "yaml"
 module Jets
   module Gems
     def ruby_folder
-      major, minor, _ = RUBY_VERSION.split('.')
-      [major, minor, '0'].join('.') # 2.5.1 => 2.5.0
+      major, minor, _ = RUBY_VERSION.split(".")
+      [major, minor, "0"].join(".") # 2.5.1 => 2.5.0
     end
 
     extend self

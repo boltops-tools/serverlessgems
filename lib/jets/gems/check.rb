@@ -6,7 +6,7 @@ module Jets::Gems
     extend Memoist
 
     attr_reader :missing_gems
-    def initialize(options={})
+    def initialize(options = {})
       @options = options
       @missing_gems = [] # keeps track of gems that are not found in any of the serverlessgems source
     end
@@ -17,7 +17,7 @@ module Jets::Gems
     end
 
     def gems_source
-      ENV['SG_API'] || Jets.config.gems.source
+      ENV["SG_API"] || Jets.config.gems.source
     end
 
     # Checks whether the gem is found at the serverlessgems source.
@@ -35,7 +35,7 @@ module Jets::Gems
         # Better to error now than deploy a broken package to AWS Lambda.
         # Provide users with message about using their own serverlessgems source.
         puts missing_message
-        names = @missing_gems.map {|i| i['gem_name']}
+        names = @missing_gems.map { |i| i["gem_name"] }
         Report.new(@options).report(names) if agree.yes?
         exit 1
       end
@@ -48,36 +48,36 @@ module Jets::Gems
     end
 
     def missing_message
-      template = <<-EOL
-Your project requires compiled gems that are not currently available.  Unavailable pre-compiled gems:
-<% missing_gems.each do |missing_gem|
-   available = missing_gem['available'].reject { |v| missing_gem['gem_name'].include?(v) }
-%>
-* Unavailable: <%= missing_gem['gem_name'] -%> Available versions: <%= available.join(' ') %>
-<% end %>
-Your current serverlessgems source: #{gems_source}
-
-Jets is unable to build a deployment package that will work on AWS Lambda without the required pre-compiled gems. To remedy this, you can:
-
-* Use another gem that does not require compilation.
-* Create your own custom layer with the gem: http://rubyonjets.com/docs/extras/custom-lambda-layers/
-<% if agree.yes? -%>
-* No need to report this to us, as we've already been notified.
-* Usually, missing gems can be built within a few minutes.
-* Some gems may take days or even longer.
-<% elsif agree.no? -%>
-* You have choosen not to report data to serverlessgems so we will not be notified about these missing gems.
-* You can edit ~/.jets/agree to change this.
-* Reporting gems generally allows Serverless Gems to build the missing gems within a few minutes.
-* You can try redeploying again after a few minutes.
-* Non-reported gems may take days or even longer to be built.
-<% end -%>
-
-Compiled gems usually take some time to figure out how to build as they each depend on different libraries and packages.
-More info: http://rubyonjets.com/docs/serverlessgems/
-
-EOL
-      erb = ERB.new(template, trim_mode: '-') # trim mode https://stackoverflow.com/questions/4632879/erb-template-removing-the-trailing-line
+      template = <<~EOL
+        Your project requires compiled gems that are not currently available.  Unavailable pre-compiled gems:
+        <% missing_gems.each do |missing_gem|
+           available = missing_gem['available'].reject { |v| missing_gem['gem_name'].include?(v) }
+        %>
+        * Unavailable: <%= missing_gem['gem_name'] -%> Available versions: <%= available.join(' ') %>
+        <% end %>
+        Your current serverlessgems source: #{gems_source}
+        
+        Jets is unable to build a deployment package that will work on AWS Lambda without the required pre-compiled gems. To remedy this, you can:
+        
+        * Use another gem that does not require compilation.
+        * Create your own custom layer with the gem: http://rubyonjets.com/docs/extras/custom-lambda-layers/
+        <% if agree.yes? -%>
+        * No need to report this to us, as we've already been notified.
+        * Usually, missing gems can be built within a few minutes.
+        * Some gems may take days or even longer.
+        <% elsif agree.no? -%>
+        * You have choosen not to report data to serverlessgems so we will not be notified about these missing gems.
+        * You can edit ~/.jets/agree to change this.
+        * Reporting gems generally allows Serverless Gems to build the missing gems within a few minutes.
+        * You can try redeploying again after a few minutes.
+        * Non-reported gems may take days or even longer to be built.
+        <% end -%>
+        
+        Compiled gems usually take some time to figure out how to build as they each depend on different libraries and packages.
+        More info: http://rubyonjets.com/docs/serverlessgems/
+        
+      EOL
+      erb = ERB.new(template, trim_mode: "-") # trim mode https://stackoverflow.com/questions/4632879/erb-template-removing-the-trailing-line
       erb.result(binding)
     end
 
@@ -159,7 +159,7 @@ EOL
     GEM_REGEXP = /-(arm|x)\d+.*-(darwin|linux)/
     def other_compiled_gems
       paths = Dir.glob("#{Jets.build_root}/stage/opt/ruby/gems/#{Jets::Gems.ruby_folder}/gems/*{-darwin,-linux}")
-      paths.map { |p| File.basename(p).sub(GEM_REGEXP,'') }
+      paths.map { |p| File.basename(p).sub(GEM_REGEXP, "") }
     end
 
     def registered_compiled_gems
@@ -167,9 +167,9 @@ EOL
       registered_gems = registered.all # no version numbers in this list
 
       paths = Dir.glob("#{Jets.build_root}/stage/opt/ruby/gems/#{Jets::Gems.ruby_folder}/gems/*")
-      project_gems = paths.map { |p| File.basename(p).sub(GEM_REGEXP,'') }
+      project_gems = paths.map { |p| File.basename(p).sub(GEM_REGEXP, "") }
       project_gems.select do |name|
-        name_only = name.sub(/-\d+\.\d+\.\d+.*/,'')
+        name_only = name.sub(/-\d+\.\d+\.\d+.*/, "")
         registered_gems.include?(name_only)
       end
     end
@@ -210,7 +210,7 @@ EOL
     # Thanks: https://gist.github.com/aelesbao/1414b169a79162b1d795 and
     #   https://stackoverflow.com/questions/5165950/how-do-i-get-a-list-of-gems-that-are-installed-that-have-native-extensions
     def gemspec_compiled_gems
-      specs = Gem::Specification.each.select { |spec| spec.extensions.any?  }
+      specs = Gem::Specification.each.select { |spec| spec.extensions.any? }
       specs.reject! { |spec| weird_gem?(spec.name) }
       specs.map(&:full_name)
     end

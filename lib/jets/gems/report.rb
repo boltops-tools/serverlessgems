@@ -4,7 +4,7 @@ module Jets::Gems
   class Report
     include Jets::Gems::Api::Concern
 
-    def initialize(options={})
+    def initialize(options = {})
       @options = options
     end
 
