@@ -38,7 +38,8 @@ module Jets::Gems::Extract
       gem_groups = {}
       gem_dirs.each do |dir|
         name = File.basename(dir)
-        base_name = name.sub(/-(x86_64|arm64|aarch64|i386|powerpc|sparc|mips|riscv|loongarch|sw_64|hppa|ia64|s390).*/, "")
+        # Handle platform-specific gem names like nokogiri-1.18.10-x86_64-linux-gnu
+        base_name = name.sub(/-(x86_64-linux-gnu|aarch64-linux-gnu|arm64-linux-gnu|i386-linux-gnu|powerpc-linux-gnu|sparc-linux-gnu|mips-linux-gnu|riscv-linux-gnu|loongarch-linux-gnu|sw_64-linux-gnu|hppa-linux-gnu|ia64-linux-gnu|s390-linux-gnu|x86_64|arm64|aarch64|i386|powerpc|sparc|mips|riscv|loongarch|sw_64|hppa|ia64|s390).*/, "")
         gem_groups[base_name] ||= []
         gem_groups[base_name] << {dir: dir, name: name}
       end
@@ -51,7 +52,7 @@ module Jets::Gems::Extract
         variants.each { |v| say "  - #{v[:name]}" }
 
         # Find x86_64-linux variants (preferred for AWS Lambda)
-        x86_64_variants = variants.select { |v| v[:name].include?("-x86_64-linux") }
+        x86_64_variants = variants.select { |v| v[:name].include?("-x86_64-linux-gnu") || v[:name].include?("-x86_64-linux") }
 
         if x86_64_variants.any?
           # Keep x86_64-linux variants, remove others
