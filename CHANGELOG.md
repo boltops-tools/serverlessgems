@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 This project *loosely tries* to adhere to [Semantic Versioning](http://semver.org/).
 
+## [0.4.3] - 2025-10-11
+- fix clean up gem variants
+
 ## [0.4.2] - 2025-10-10
 - fix gem detection ffi - gnu suffix and clean up incompatible platform variants
 
